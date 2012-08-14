@@ -1,0 +1,67 @@
+{
+  "status":  "success",
+  "data":  [
+    {
+    "trade_id": "20110208-XVBFCV",
+    "ccy_pair": "GBPUSD",
+    "client_ccy_pair": "GBPUSD",
+    "client_buy_amt": 10000.00,
+    "client_buy_ccy":  "GBP",
+    "client_sell_amt": 16150.00,
+    "client_sell_ccy": "USD",
+    "side":  1,
+    "client_side": 1,
+    "client_rate": 1.6150,
+    "client_invr": 0.6191,
+    "fxc_market_rate": 1.6084,
+    "fxc_market_invr": 0.6217,
+    "traded_at_date":  "2011-02-08",
+    "traded_at_time": "10:25:52",
+    "settlement_date": "2012-02-07",
+    "settlement_time": "15:00:00",
+    "delivery_date": "2012-02-07",
+    "product": "forward",
+    "deposit_required":  true,
+    "status":  "awaiting_funds",
+    "display_inverse": false,
+    "dealer_id": "John Smith",
+    "trading_contact_name":  "Joe Bloggs",
+    "forward": {
+      "status":  "deposit_received",
+      "deposit_req_at":  "2011-02-10 15:00:00",
+      "deposit_amt": "1615.00"
+      }
+    },
+    {
+    "trade_id": "20110208-XVBFCV",
+    "ccy_pair": "GBPUSD",
+    "client_ccy_pair": "GBPUSD",
+    "client_buy_amt": 10000.00,
+    "client_buy_ccy":  "GBP",
+    "client_sell_amt": 16150.00,
+    "client_sell_ccy": "USD",
+    "side":  1,
+    "client_side": 1,
+    "client_rate": 1.6150,
+    "client_invr": 0.6191,
+    "fxc_market_rate": 1.6084,
+    "fxc_market_invr": 0.6217,
+    "traded_at_date":  "2011-02-08",
+    "traded_at_time": "10:25:52",
+    "settlement_date": "2012-02-07",
+    "settlement_time": "15:00:00",
+    "delivery_date": "2012-02-07",
+    "product": "forward",
+    "deposit_required":  true,
+    "status":  "awaiting_funds",
+    "display_inverse": false,
+    "dealer_id": "John Smith",
+    "trading_contact_name":  "Joe Bloggs",
+    "forward": {
+      "status":  "deposit_received",
+      "deposit_req_at":  "2011-02-10 15:00:00",
+      "deposit_amt": "1615.00"
+      }
+    }
+    ]
+  }

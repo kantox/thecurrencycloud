@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "data": {
+  "bid_price_timestamp": "20110218-10:37:11",
+  "bid_price": 0.8364,
+  "broker_bid":  0.8314,
+  "offer_price_timestamp": "20110218-10:37:11",
+  "offer_price": 0.8368,
+  "broker_offer":  0.8418,
+  "market_price":  0.8366,
+  "value_date":  20110222,
+  "quote_condition": "open",
+  "real_market": "EURGBP",
+  "ccy_pair": "EURGBP"
+  }
+}
