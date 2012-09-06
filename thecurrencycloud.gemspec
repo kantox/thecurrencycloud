@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('json')
   s.add_runtime_dependency('hashie', '~> 1.0')
   s.add_runtime_dependency('httparty', '~> 0.8')
+  s.add_runtime_dependency('rest-client')
   s.name = "thecurrencycloud"
   s.author = "Simon Reed"
   s.description = %q{Implements the complete functionality of The Currency Cloud ConnectAPI.}

@@ -22,6 +22,22 @@ module TheCurrencyCloud
     def base_uri(uri)
       r = TheCurrencyCloud.base_uri uri
     end
+
+    def default_options
+      r = TheCurrencyCloud.default_options
+    end    
+
+    def environment(env)
+      case env.to_sym
+      when :demo
+        uri = "https://devapi.thecurrencycloud.com/api/en/v1.0"
+      when :ref
+        uri = "http://refapi.thecurrencycloud.com/api/en/v1.0"
+      else
+        uri = "https://api.thecurrencycloud.com/api/en/v1.0"
+      end
+      TheCurrencyCloud.base_uri uri
+    end
   end
 
   # Represents a TheCurrencyCloud API error and contains specific data about the error.
@@ -59,7 +75,7 @@ module TheCurrencyCloud
       end
     end
     parser Parser::DealWithTheCurrencyCloudInvalidJson
-    @@base_uri = "http://refapi.thecurrencycloud.com/api/en/v1.0"
+    @@base_uri = "https://api.thecurrencycloud.com/api/en/v1.0"
     @@api_key = ""
     headers({
       'User-Agent' => "thecurrencycloud-ruby-#{VERSION}",
@@ -78,6 +94,17 @@ module TheCurrencyCloud
     def self.put(*args); handle_response super end
     def self.delete(*args); handle_response super end
 
+    def self.post_form(action, options = {})
+      uri = URI.parse(TheCurrencyCloud.default_options[:base_uri])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = (TheCurrencyCloud.default_options[:base_uri] =~ /https/) ? true : false
+      data = options.collect { |key, value| "#{key}=#{value}"}.join('&')
+      response = http.post('/api/en/v1.0' +action, data)
+      data = response.body
+      handle_response(response)
+      return JSON.parse(data)
+    end
+
     def self.handle_response(response) # :nodoc:
       case response.code
       when 400
@@ -91,9 +118,11 @@ module TheCurrencyCloud
       when 500...600
         raise ServerError.new
       else
-        mash_response = Hashie::Mash.new(response)
+        data = (response.body and response.body.length >= 2) ? response.body : nil
+        return response if data.nil?
+        mash_response = Hashie::Mash.new(JSON.parse(data))
         if mash_response.status == "error"
-          raise BadRequest.new(Hashie::Mash.new response)
+          raise BadRequest.new(mash_response)
         else
           response
         end

@@ -18,16 +18,14 @@ def fixture_file(filename)
   File.read(file_path)
 end
 
-def thecurrencycloud_url(api_key, url)
-  api_key.nil? ? url : url =~ /^http/ ? url : "https://refapi.thecurrencycloud.com/api/en/v1.0/#{url}"
-end
-
 def stub_request(method, api_key, url, filename, status=nil)
-  options = {:body => ""}
+  options = {:body => "", :params => :any }
   options.merge!({:body => fixture_file(filename)}) if filename
   options.merge!({:status => status}) if status
   options.merge!(:content_type => "application/json; charset=utf-8")
-  FakeWeb.register_uri(method, thecurrencycloud_url(api_key, url), options)
+  # Register both http (port 443) and https as HTTParty calls them both.
+  FakeWeb.register_uri(method, "https://api.thecurrencycloud.com/api/en/v1.0/#{url}", options)
+#  FakeWeb.register_uri(method, "http://api.thecurrencycloud.com:443/api/en/v1.0/#{url}", options)
 end
 
 def stub_get(*args); stub_request(:get, *args) end
