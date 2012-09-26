@@ -25,7 +25,7 @@ module TheCurrencyCloud
 
     def default_options
       r = TheCurrencyCloud.default_options
-    end    
+    end
 
     def environment(env)
       case env.to_sym
@@ -90,16 +90,12 @@ module TheCurrencyCloud
     end
 
     def self.get(*args); handle_response super end
-    def self.post(*args); handle_response super end
+    def self.post(*args);  handle_response super end
     def self.put(*args); handle_response super end
     def self.delete(*args); handle_response super end
 
-    def self.post_form(action, options = {})
-      uri = URI.parse(TheCurrencyCloud.default_options[:base_uri])
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = (TheCurrencyCloud.default_options[:base_uri] =~ /https/) ? true : false
-      data = options.collect { |key, value| "#{key}=#{value}"}.join('&')
-      response = http.post('/api/en/v1.0' +action, data)
+    def self.post_form(action,options={})
+      response = RestClient.post "#{TheCurrencyCloud.default_options[:base_uri]}#{action}",options
       data = response.body
       handle_response(response)
       return JSON.parse(data)

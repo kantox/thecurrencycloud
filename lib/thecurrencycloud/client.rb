@@ -21,14 +21,14 @@ module TheCurrencyCloud
     def prices_client_quote(buy_currency, sell_currency, side, amount, options={})
       side = convert_sell_sym(side)
       options.merge!(:buy_currency => buy_currency, :sell_currency => sell_currency, :side  => side, :amount => amount)
-      response = post "prices/client_quote", options
+      response = TheCurrencyCloud.post_form("/#{token}/prices/client_quote", options)
       mash = Price.new(response)
       return mash.data
-    end 
+    end
 
     # Returns a list of trades
     def trades
-      response = get "trades"
+      response = TheCurrencyCloud.get("/#{token}/trades")
       mash = Trade.new(response)
       mash.data.collect{|d| Trade.new(d)}
     end
@@ -36,7 +36,13 @@ module TheCurrencyCloud
     # Executes a trade
     def trade_execute(options)
       side = convert_sell_sym(options[:side])
-      response = post "trade/execute", options.merge(:side => side)
+      response = TheCurrencyCloud.post_form("/#{token}/trade/execute", options.merge(:side => side))
+      mash = Trade.new(response)
+      return mash.data
+    end
+
+    def trade(trade_id)
+      response = TheCurrencyCloud.get("/#{token}/trade/#{trade_id}")
       mash = Trade.new(response)
       return mash.data
     end
@@ -46,7 +52,7 @@ module TheCurrencyCloud
       response = get "payments"
       mash = Hashie::Mash.new(response)
       mash.data.collect{|d| Payment.new(d)}
-    end    
+    end
 
     # Close the session
     def close_session
@@ -77,7 +83,7 @@ module TheCurrencyCloud
 
     def post_form(action, options = {})
       TheCurrencyCloud.post_form uri_for(action), options
-    end    
+    end
 
     def put(action, options = {})
       TheCurrencyCloud.put uri_for(action), :data => options
@@ -96,6 +102,6 @@ module TheCurrencyCloud
         raise "Side must be :buy or :sell"
       end
       return side
-    end    
+    end
   end
 end
