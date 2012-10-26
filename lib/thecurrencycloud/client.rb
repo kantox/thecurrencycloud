@@ -62,6 +62,11 @@ module TheCurrencyCloud
       mash.data.collect{|d| Payment.new(d)}
     end
 
+    def create_bank_account(bank)
+      response = TheCurrencyCloud.post_form("/#{token}/bank_account/new",bank)
+      return Hashie::Mash.new(response).data
+    end
+
     # Close the session
     def close_session
       response = post "close_session"
