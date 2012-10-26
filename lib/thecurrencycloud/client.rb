@@ -41,6 +41,14 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    # Executes a trade with payment
+    def trade_execute_with_payment(options)
+      side = convert_sell_sym(options[:side])
+      response = TheCurrencyCloud.post_form("/#{token}/trade/execute_with_payment", options.merge(:side => side))
+      mash = Trade.new(response)
+      return mash.data
+    end
+
     def trade(trade_id)
       response = TheCurrencyCloud.get("/#{token}/trade/#{trade_id}")
       mash = Trade.new(response)
@@ -59,7 +67,7 @@ module TheCurrencyCloud
       response = post "close_session"
       mash = Hashie::Mash.new(response)
       @token = nil
-      return true
+      return mash.data
     end
 
     private
