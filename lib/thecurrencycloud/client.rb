@@ -55,11 +55,41 @@ module TheCurrencyCloud
       return mash.data
     end
 
-    # Returns a list of trades
+    # Returns a list of payments
     def payments
-      response = get "payments"
-      mash = Hashie::Mash.new(response)
-      mash.data.collect{|d| Payment.new(d)}
+      # /api/en/v1.0/:token/payments
+      response = TheCurrencyCloud.get("/#{token}/payments")
+      response.parsed_response['data'].collect{|d| Payment.new(d)}
+    end
+
+    # Returns a list of payments
+    def payment(trade_id,options={})
+      # /api/en/v1.0/:token/payment/:payment_id
+      response = TheCurrencyCloud.get("/#{token}/payment/#{trade_id}")
+      #mash = Payment.new(response)
+      #return mash.data
+    end
+
+    def create_payment(id,options)
+      #/api/en/v1.0/:token/payment/:payment_id
+      response = TheCurrencyCloud.post_form("/#{token}/payment/#{id}", options)
+    end
+
+    def bank_accounts
+      # /api/en/v1.0/:token/bank_accounts
+      response = TheCurrencyCloud.get("/#{token}/bank_accounts")
+      response.parsed_response['data'].collect{|d| Bank.new(d)}
+    end
+
+    def bank_account(id)
+      # /api/en/v1.0/:token/bank_account/:beneficiary_id
+      response = TheCurrencyCloud.get("/#{token}/bank_account/#{id}")
+      mash = Bank.new(response)
+      return mash.data
+    end
+
+    def bank_required_fields(currency, destination_country_code)
+        # /api/en/v1.0/:token/bank_accounts/required_fields
     end
 
     def create_bank_account(bank)
@@ -69,7 +99,8 @@ module TheCurrencyCloud
 
     # Close the session
     def close_session
-      response = post "close_session"
+      #/api/en/v1.0/:token/close_session
+      response = TheCurrencyCloud.post("/#{token}/close_session")
       mash = Hashie::Mash.new(response)
       @token = nil
       return mash.data

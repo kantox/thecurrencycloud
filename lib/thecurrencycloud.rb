@@ -10,6 +10,8 @@ require 'thecurrencycloud/version'
 require 'thecurrencycloud/client'
 require 'thecurrencycloud/price'
 require 'thecurrencycloud/trade'
+require 'thecurrencycloud/payment'
+require 'thecurrencycloud/bank'
 
 module TheCurrencyCloud
 

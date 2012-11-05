@@ -1,5 +1,5 @@
 module TheCurrencyCloud
-  # Represents a payment
+  # Represents a trade
   class Payment < Hashie::Mash
   end
 end
