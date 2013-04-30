@@ -75,6 +75,10 @@ module TheCurrencyCloud
       response = TheCurrencyCloud.post_form("/#{token}/payment/#{id}", options)
     end
 
+    def add_payment(options)
+      Payment.new(TheCurrencyCloud.post_form("/#{token}/payment/add", options))
+    end
+
     def bank_accounts
       # /api/en/v1.0/:token/bank_accounts
       response = TheCurrencyCloud.get("/#{token}/bank_accounts")
