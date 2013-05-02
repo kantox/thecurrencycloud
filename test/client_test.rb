@@ -33,6 +33,13 @@ class ClientTest < Test::Unit::TestCase
       trade.trade_id.should == "20100708-KLXRNT"
     end
 
+    should "add payment" do
+      stub_post(@api_key, "d58440e120d6012dc05423001a48acdf/payment/add", "payment_add.json")
+      resp = @client.add_payment(:trade_id => "20130430-XXXXXX", currency: 'EUR',
+                                 amount: '1000.00', beneficiary_id: '18c752e0-c98c-012d-2335-24201ac3f236')
+      resp.message.should == "Your payment was saved"
+    end
+
     context "close a session" do
       should "clear the token" do
         stub_post(@api_key, "d58440e120d6012dc05423001a48acdf/close_session", "authentication_close.json")
