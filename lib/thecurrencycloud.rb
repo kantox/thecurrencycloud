@@ -91,10 +91,11 @@ module TheCurrencyCloud
       @@api_key = api_key
     end
 
-    def self.get(*args); handle_response super end
-    def self.post(*args);  handle_response super end
-    def self.put(*args); handle_response super end
-    def self.delete(*args); handle_response super end
+
+    def self.get(*args);      handle_response super end
+    def self.post(*args);     handle_response super end
+    def self.put(*args);      handle_response super end
+    def self.delete(*args);   handle_response super end
 
     def self.post_form(action,options={})
       response = RestClient.post "#{TheCurrencyCloud.default_options[:base_uri]}#{action}",options

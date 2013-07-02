@@ -27,8 +27,8 @@ module TheCurrencyCloud
     end
 
     # Returns a list of trades
-    def trades
-      response = TheCurrencyCloud.get("/#{token}/trades")
+    def trades(options={})
+      response = TheCurrencyCloud.get("/#{token}/trades",query: options)
       mash = Trade.new(response)
       mash.data.collect{|d| Trade.new(d)}
     end
@@ -56,13 +56,12 @@ module TheCurrencyCloud
     end
 
     # Returns a list of payments
-    def payments
+    def payments(options={})
       # /api/en/v1.0/:token/payments
-      response = TheCurrencyCloud.get("/#{token}/payments")
+      response = TheCurrencyCloud.get("/#{token}/payments",query: options)
       response.parsed_response['data'].collect{|d| Payment.new(d)}
     end
 
-    # Returns a list of payments
     def payment(trade_id,options={})
       # /api/en/v1.0/:token/payment/:payment_id
       response = TheCurrencyCloud.get("/#{token}/payment/#{trade_id}")
@@ -85,9 +84,9 @@ module TheCurrencyCloud
       response.parsed_response['data'].collect{|d| Bank.new(d)}
     end
 
-    def bank_account(id)
+    def beneficiary(id)
       # /api/en/v1.0/:token/bank_account/:beneficiary_id
-      response = TheCurrencyCloud.get("/#{token}/bank_account/#{id}")
+      response = TheCurrencyCloud.get("/#{token}/beneficiary/#{id}")
       mash = Bank.new(response)
       return mash.data
     end
