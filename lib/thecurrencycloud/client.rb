@@ -65,8 +65,8 @@ module TheCurrencyCloud
     def payment(trade_id,options={})
       # /api/en/v1.0/:token/payment/:payment_id
       response = TheCurrencyCloud.get("/#{token}/payment/#{trade_id}")
-      #mash = Payment.new(response)
-      #return mash.data
+      mash = Payment.new(response)
+      return mash.data
     end
 
     def create_payment(id,options)
@@ -78,11 +78,17 @@ module TheCurrencyCloud
       Payment.new(TheCurrencyCloud.post_form("/#{token}/payment/add", options))
     end
 
+    def update_payment(id, options)
+      TheCurrencyCloud.post_form("/#{token}/payment/#{id}", options)
+    end
+
     def bank_accounts
       # /api/en/v1.0/:token/bank_accounts
       response = TheCurrencyCloud.get("/#{token}/bank_accounts")
       response.parsed_response['data'].collect{|d| Bank.new(d)}
     end
+
+    alias :beneficiaries :bank_accounts
 
     def beneficiary(id)
       # /api/en/v1.0/:token/bank_account/:beneficiary_id
