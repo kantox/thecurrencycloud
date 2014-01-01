@@ -5,9 +5,10 @@ require 'rest_client'
 module TheCurrencyCloud
   # Represents a client and associated functionality.
   class Client
-    attr_reader :client_id, :token
+    attr_reader :client_id, :api_key, :token
 
-    def initialize(client_id)
+    def initialize(client_id, api_key = nil)
+      @api_key = api_key
       @client_id = client_id
       @token = authenticate(client_id)
     end
@@ -118,7 +119,7 @@ module TheCurrencyCloud
     private
 
     def authenticate(login_id)
-      response = TheCurrencyCloud.post_form("/authentication/token/new", { :login_id => login_id, :api_key => TheCurrencyCloud.api_key})
+      response = TheCurrencyCloud.post_form("/authentication/token/new", { :login_id => login_id, :api_key => @api_key || TheCurrencyCloud.api_key})
       mash = Hashie::Mash.new(response)
       return mash.data
     end
