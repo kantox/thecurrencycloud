@@ -11,6 +11,7 @@ require 'thecurrencycloud/client'
 require 'thecurrencycloud/price'
 require 'thecurrencycloud/trade'
 require 'thecurrencycloud/payment'
+require 'thecurrencycloud/beneficiary'
 require 'thecurrencycloud/bank'
 
 module TheCurrencyCloud
