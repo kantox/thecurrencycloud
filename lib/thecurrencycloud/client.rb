@@ -98,6 +98,13 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    def beneficiary_required_details(currency, destination_country_code)
+      # /api/en/v1.0/:token/beneficiaries/required_fields
+      response = TheCurrencyCloud.get("/#{token}/beneficiaries/required_fields", {ccy: currency, destination_country_code: destination_country_code})
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
     def bank_required_fields(currency, destination_country_code)
         # /api/en/v1.0/:token/bank_accounts/required_fields
     end
