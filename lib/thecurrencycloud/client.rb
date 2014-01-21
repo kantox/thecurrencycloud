@@ -15,7 +15,7 @@ module TheCurrencyCloud
 
     def prices_market(ccy_pair,options={})
       response = get "prices/market/#{ccy_pair.upcase}", options
-      mash = TheCurrencyCloud::Price.new(response)
+      mash = Price.new(response)
       return mash.data
     end
 
@@ -23,14 +23,14 @@ module TheCurrencyCloud
       side = convert_sell_sym(side)
       options.merge!(:buy_currency => buy_currency, :sell_currency => sell_currency, :side  => side, :amount => amount)
       response = TheCurrencyCloud.post_form("/#{token}/prices/client_quote", options)
-      mash = TheCurrencyCloud::Price.new(response)
+      mash = Price.new(response)
       return mash.data
     end
 
     # Returns a list of trades
     def trades(options={})
       response = TheCurrencyCloud.get("/#{token}/trades",query: options)
-      mash = TheCurrencyCloud::Trade.new(response)
+      mash = Trade.new(response)
       mash.data.collect{|d| Trade.new(d)}
     end
 
@@ -38,7 +38,7 @@ module TheCurrencyCloud
     def trade_execute(options)
       side = convert_sell_sym(options[:side])
       response = TheCurrencyCloud.post_form("/#{token}/trade/execute", options.merge(:side => side))
-      mash = TheCurrencyCloud::Trade.new(response)
+      mash = Trade.new(response)
       return mash.data
     end
 
@@ -46,13 +46,13 @@ module TheCurrencyCloud
     def trade_execute_with_payment(options)
       side = convert_sell_sym(options[:side])
       response = TheCurrencyCloud.post_form("/#{token}/trade/execute_with_payment", options.merge(:side => side))
-      mash = TheCurrencyCloud::Trade.new(response)
+      mash = Trade.new(response)
       return mash.data
     end
 
     def trade(trade_id)
       response = TheCurrencyCloud.get("/#{token}/trade/#{trade_id}")
-      mash = TheCurrencyCloud::Trade.new(response)
+      mash = Trade.new(response)
       return mash.data
     end
 
@@ -66,7 +66,7 @@ module TheCurrencyCloud
     def payment(trade_id,options={})
       # /api/en/v1.0/:token/payment/:payment_id
       response = TheCurrencyCloud.get("/#{token}/payment/#{trade_id}")
-      mash = TheCurrencyCloud::Payment.new(response)
+      mash = Payment.new(response)
       return mash.data
     end
 
@@ -76,7 +76,7 @@ module TheCurrencyCloud
     end
 
     def add_payment(options)
-      TheCurrencyCloud::Payment.new(TheCurrencyCloud.post_form("/#{token}/payment/add", options))
+      Payment.new(TheCurrencyCloud.post_form("/#{token}/payment/add", options))
     end
 
     def update_payment(id, options)
@@ -86,7 +86,7 @@ module TheCurrencyCloud
     def bank_accounts
       # /api/en/v1.0/:token/bank_accounts
       response = TheCurrencyCloud.get("/#{token}/bank_accounts")
-      response.parsed_response['data'].collect{|d| TheCurrencyCloud::Bank.new(d)}
+      response.parsed_response['data'].collect{|d| Bank.new(d)}
     end
 
     alias :beneficiaries :bank_accounts
@@ -94,14 +94,21 @@ module TheCurrencyCloud
     def beneficiary(id)
       # /api/en/v1.0/:token/bank_account/:beneficiary_id
       response = TheCurrencyCloud.get("/#{token}/beneficiary/#{id}")
-      mash = TheCurrencyCloud::Bank.new(response)
+      mash = Bank.new(response)
       return mash.data
     end
 
     def beneficiary_required_details(currency, destination_country_code)
       # /api/en/v1.0/:token/beneficiaries/required_fields
       response = TheCurrencyCloud.get("/#{token}/beneficiaries/required_fields?ccy=#{currency}&destination_country_code=#{destination_country_code}")
-      mash = TheCurrencyCloud::Beneficiary.new(response)
+      mash = Beneficiary.new(response)
+      return mash.data.collect(&:required).flatten.uniq
+    end
+
+    def beneficiary_validate_details(options = {})
+      query_string = options.to_query
+      response = TheCurrencyCloud.get("/#{token}/beneficiary/validate_details?#{query_string}")
+      mash = Beneficiary.new(response)
       return mash.data
     end
 
