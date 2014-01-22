@@ -106,6 +106,15 @@ module TheCurrencyCloud
       return Hashie::Mash.new(response).data
     end
 
+    alias :create_beneficiary :create_bank_account
+
+    def update_bank_account(id,options)
+      response = TheCurrencyCloud.post_form("/#{token}/bank_account/#{id}",options)
+      return Hashie::Mash.new(response).data
+    end
+
+    alias :update_beneficiary :update_bank_account
+
     # Close the session
     def close_session
       #/api/en/v1.0/:token/close_session
