@@ -98,6 +98,24 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    def update_beneficiary(beneficiary_id, beneficiary_details)
+      response = TheCurrencyCloud.post_form("/#{token}/beneficiary/#{beneficiary_id}", beneficiary_details)
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
+    def beneficiaries
+      response = TheCurrencyCloud.get("/#{token}/beneficiaries")
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
+    def create_beneficiary(beneficiary_details)
+      response = TheCurrencyCloud.post_form("/#{token}/beneficiary/new", beneficiary_details)
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
     def beneficiary_required_details(currency, destination_country_code)
       # /api/en/v1.0/:token/beneficiaries/required_fields
       response = TheCurrencyCloud.get("/#{token}/beneficiaries/required_fields?ccy=#{currency}&destination_country_code=#{destination_country_code}")
