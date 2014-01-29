@@ -56,6 +56,11 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    def settlement_account(trade_id)
+      response = TheCurrencyCloud.get("/#{token}/trade/#{trade_id}/settlement_account")
+      mash = Trade.new(response)
+      return mash
+    end
     # Returns a list of payments
     def payments(options={})
       # /api/en/v1.0/:token/payments
