@@ -1,3 +1,3 @@
- curl -d 'login_id=market@kantox.com&api_key=15c6334eaedfb7e6b70fd80ef68a9e25b3afa85a8a476c29f88b35372bcbf3b7' https://api.thecurrencycloud.com/api/en/v1.0/authentication/token/new
+Removing API key. This is bad thing to have in a public repository.
 
- curl -d 'buy_currency=USD&sell_currency=EUR&side=1&amount=100000.00&delivery_date=20130108' https://api.thecurrencycloud.com/api/en/v1.0/ab2210a03acb0130a6540022194273f7/prices/client_quote
+You should reset your API keys right now (assuming it's not a dev key)
