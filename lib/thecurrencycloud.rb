@@ -33,11 +33,11 @@ module TheCurrencyCloud
     def environment(env)
       case env.to_sym
       when :demo
-        uri = "https://devapi.thecurrencycloud.com/api/en/v1.0"
+        uri = "https://devapi.thecurrencycloudr.com/api/en/v1.0"
       when :ref
-        uri = "http://refapi.thecurrencycloud.com/api/en/v1.0"
+        uri = "http://refapi.thecurrencycloudr.com/api/en/v1.0"
       else
-        uri = "https://api.thecurrencycloud.com/api/en/v1.0"
+        uri = "https://api.thecurrencycloudr.com/api/en/v1.0"
       end
       TheCurrencyCloud.base_uri uri
     end
