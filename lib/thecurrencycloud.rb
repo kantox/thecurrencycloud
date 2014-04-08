@@ -11,6 +11,7 @@ require 'thecurrencycloud/client'
 require 'thecurrencycloud/price'
 require 'thecurrencycloud/trade'
 require 'thecurrencycloud/payment'
+require 'thecurrencycloud/beneficiary'
 require 'thecurrencycloud/bank'
 
 module TheCurrencyCloud
@@ -32,11 +33,11 @@ module TheCurrencyCloud
     def environment(env)
       case env.to_sym
       when :demo
-        uri = "https://devapi.thecurrencycloud.com/api/en/v1.0"
+        uri = "https://devapi.thecurrencycloudr.com/api/en/v1.0"
       when :ref
-        uri = "http://refapi.thecurrencycloud.com/api/en/v1.0"
+        uri = "http://refapi.thecurrencycloudr.com/api/en/v1.0"
       else
-        uri = "https://api.thecurrencycloud.com/api/en/v1.0"
+        uri = "https://api.thecurrencycloudr.com/api/en/v1.0"
       end
       TheCurrencyCloud.base_uri uri
     end
@@ -64,7 +65,7 @@ module TheCurrencyCloud
   class TheCurrencyCloud
     include HTTParty
     debug_output $stdout
-
+    RestClient.log = $stdout
     class Parser::DealWithTheCurrencyCloudInvalidJson < HTTParty::Parser
       # The thecurrencycloud API returns an ID as a string when a 201 Created
       # response is returned. Unfortunately this is invalid json.

@@ -5,9 +5,10 @@ require 'rest_client'
 module TheCurrencyCloud
   # Represents a client and associated functionality.
   class Client
-    attr_reader :client_id, :token
+    attr_reader :client_id, :api_key, :token
 
-    def initialize(client_id)
+    def initialize(client_id, api_key = nil)
+      @api_key = api_key
       @client_id = client_id
       @token = authenticate(client_id)
     end
@@ -55,6 +56,11 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    def settlement_account(trade_id)
+      response = TheCurrencyCloud.get("/#{token}/trade/#{trade_id}/settlement_account")
+      mash = Trade.new(response)
+      return mash
+    end
     # Returns a list of payments
     def payments(options={})
       # /api/en/v1.0/:token/payments
@@ -97,6 +103,38 @@ module TheCurrencyCloud
       return mash.data
     end
 
+    def update_beneficiary(beneficiary_id, beneficiary_details)
+      response = TheCurrencyCloud.post_form("/#{token}/beneficiary/#{beneficiary_id}", beneficiary_details)
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
+    def beneficiaries
+      response = TheCurrencyCloud.get("/#{token}/beneficiaries")
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
+    def create_beneficiary(beneficiary_details)
+      response = TheCurrencyCloud.post_form("/#{token}/beneficiary/new", beneficiary_details)
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
+    def beneficiary_required_details(currency, destination_country_code)
+      # /api/en/v1.0/:token/beneficiaries/required_fields
+      response = TheCurrencyCloud.get("/#{token}/beneficiaries/required_fields?ccy=#{currency}&destination_country_code=#{destination_country_code}")
+      mash = Beneficiary.new(response)
+      return mash.data.collect(&:required).flatten.uniq
+    end
+
+    def beneficiary_validate_details(options = {})
+      query_string = options.to_query
+      response = TheCurrencyCloud.get("/#{token}/beneficiary/validate_details?#{query_string}")
+      mash = Beneficiary.new(response)
+      return mash.data
+    end
+
     def bank_required_fields(currency, destination_country_code)
         # /api/en/v1.0/:token/bank_accounts/required_fields
     end
@@ -127,7 +165,7 @@ module TheCurrencyCloud
     private
 
     def authenticate(login_id)
-      response = TheCurrencyCloud.post_form("/authentication/token/new", { :login_id => login_id, :api_key => TheCurrencyCloud.api_key})
+      response = TheCurrencyCloud.post_form("/authentication/token/new", { :login_id => login_id, :api_key => @api_key || TheCurrencyCloud.api_key})
       mash = Hashie::Mash.new(response)
       return mash.data
     end

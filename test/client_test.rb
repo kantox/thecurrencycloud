@@ -10,6 +10,11 @@ class ClientTest < Test::Unit::TestCase
       @client.client_id.should == '321iuhiuhi1u23hi2u3'
     end
 
+    should "accept a token as a param" do
+      @client = TheCurrencyCloud::Client.new('321iuhiuhi1u23hi2u3', '32323232323223')
+      @client.api_key.should == '32323232323223'
+    end
+
     should "set a token" do
       @client.token.should == 'd58440e120d6012dc05423001a48acdf'
     end
