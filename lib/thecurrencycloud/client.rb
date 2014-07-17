@@ -130,7 +130,7 @@ module TheCurrencyCloud
     end
 
     def delete_settlement(settlement_id)
-      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}")
+      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/delete")
       return Hashie::Mash.new(response).data
     end
 
@@ -139,20 +139,36 @@ module TheCurrencyCloud
       return Hashie::Mash.new(response).data
     end
 
-    def add_trade_settlment(settlement_id,options)
-      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/add_trade")
+    def open_settlement(settlement_id)
+      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/open")
       return Hashie::Mash.new(response).data
     end
 
-    def remove_trade_settlment(settlement_id,options)
-      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/remove",options)
+    def add_trade_settlement(settlement_id,trade_id)
+      options ={ 
+        "trade_id"=> trade_id
+      }
+      response = TheCurrencyCloud.post_form("/#{token}/settlement/#{settlement_id}/add_trade",options)
+      return Hashie::Mash.new(response).data
+    end
+
+    def remove_trade_settlement(settlement_id,trade_id)
+      options = {
+        trade_id: trade_id
+      }
+      response = TheCurrencyCloud.post_form("/#{token}/settlement/#{settlement_id}/remove",options)
       return Hashie::Mash.new(response).data
     end
 
     def settlements
-      response = TheCurrencyCloud.post("/#{token}/settlements")
+      response = TheCurrencyCloud.get("/#{token}/settlements")
       return Hashie::Mash.new(response).data
-    end   
+    end 
+
+    def get_settlement_trades(settlement_id)
+      response = TheCurrencyCloud.get("/#{token}/settlement/#{settlement_id}/trades")
+      return Hashie::Mash.new(response).data
+    end
 
     # End TCC Settlement API
 
@@ -180,6 +196,7 @@ module TheCurrencyCloud
     end
 
     def post(action, options = {})
+
       if options.any?
         return post_form(action,options)
       end
@@ -187,6 +204,7 @@ module TheCurrencyCloud
     end
 
     def post_form(action, options = {})
+      Rails.logger.debug("debug post_form #{action} options #{options}")
       TheCurrencyCloud.post_form uri_for(action), options
     end
 
