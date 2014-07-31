@@ -7,9 +7,9 @@ module TheCurrencyCloud
   class Client
     attr_reader :client_id, :token
 
-    def initialize(client_id)
+    def initialize(client_id,authenticate=true)
       @client_id = client_id
-      @token = authenticate(client_id)
+      @token = authenticate(client_id) if authenticate #useful if you don't want to connect to tcc on construc (pe testing) 
     end
 
     def prices_market(ccy_pair,options={})
