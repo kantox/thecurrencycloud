@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('mocha', '~> 0.9')
   s.add_development_dependency('shoulda', '~> 3.0.1')
   s.add_runtime_dependency('json')
-  s.add_runtime_dependency('hashie', '~> 1.0')
+  s.add_runtime_dependency('hashie', '~> 3.3.2')
   s.add_runtime_dependency('httparty', '~> 0.8')
   s.add_runtime_dependency('rest-client')
   s.name = "thecurrencycloud"

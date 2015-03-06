@@ -7,9 +7,9 @@ module TheCurrencyCloud
   class Client
     attr_reader :client_id, :token
 
-    def initialize(client_id)
+    def initialize(client_id,authenticate=true)
       @client_id = client_id
-      @token = authenticate(client_id)
+      @token = authenticate(client_id) if authenticate #useful if you don't want to connect to tcc on construc (pe testing) 
     end
 
     def prices_market(ccy_pair,options={})
@@ -98,7 +98,7 @@ module TheCurrencyCloud
     end
 
     def bank_required_fields(currency, destination_country_code)
-        # /api/en/v1.0/:token/bank_accounts/required_fields
+      # /api/en/v1.0/:token/bank_accounts/required_fields
     end
 
     def create_bank_account(bank)
@@ -112,6 +112,65 @@ module TheCurrencyCloud
       response = TheCurrencyCloud.post_form("/#{token}/bank_account/#{id}",options)
       return Hashie::Mash.new(response).data
     end
+
+    # TCC Settlement API - Not done
+    def create_settlement
+      response = TheCurrencyCloud.post_form("/#{token}/settlement/create")
+      return Hashie::Mash.new(response).data
+    end
+
+    def get_settlement(settlement_id)
+      response = TheCurrencyCloud.get("/#{token}/settlement/#{settlement_id}")
+      return Hashie::Mash.new(response).data
+    end
+
+    def get_settlement_details(settlement_id)
+      response = TheCurrencyCloud.get("/#{token}/settlement/#{settlement_id}/details")
+      return Hashie::Mash.new(response).data
+    end
+
+    def delete_settlement(settlement_id)
+      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/delete")
+      return Hashie::Mash.new(response).data
+    end
+
+    def release_settlement(settlement_id)
+      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/release")
+      return Hashie::Mash.new(response).data
+    end
+
+    def open_settlement(settlement_id)
+      response = TheCurrencyCloud.post("/#{token}/settlement/#{settlement_id}/open")
+      return Hashie::Mash.new(response).data
+    end
+
+    def add_trade_settlement(settlement_id,trade_id)
+      options ={ 
+        "trade_id"=> trade_id
+      }
+      response = TheCurrencyCloud.post_form("/#{token}/settlement/#{settlement_id}/add_trade",options)
+      return Hashie::Mash.new(response).data
+    end
+
+    def remove_trade_settlement(settlement_id,trade_id)
+      options = {
+        trade_id: trade_id
+      }
+      response = TheCurrencyCloud.post_form("/#{token}/settlement/#{settlement_id}/remove",options)
+      return Hashie::Mash.new(response).data
+    end
+
+    def settlements
+      response = TheCurrencyCloud.get("/#{token}/settlements")
+      return Hashie::Mash.new(response).data
+    end 
+
+    def get_settlement_trades(settlement_id)
+      response = TheCurrencyCloud.get("/#{token}/settlement/#{settlement_id}/trades")
+      return Hashie::Mash.new(response).data
+    end
+
+    # End TCC Settlement API
 
     alias :update_beneficiary :update_bank_account
 
@@ -137,6 +196,7 @@ module TheCurrencyCloud
     end
 
     def post(action, options = {})
+
       if options.any?
         return post_form(action,options)
       end
@@ -144,6 +204,7 @@ module TheCurrencyCloud
     end
 
     def post_form(action, options = {})
+      Rails.logger.debug("debug post_form #{action} options #{options}")
       TheCurrencyCloud.post_form uri_for(action), options
     end
 
